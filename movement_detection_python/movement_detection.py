@@ -59,7 +59,7 @@ while(True):
 	#Increment tiles in heat map
 	heat_map.increment_tiles(frame4)
 	frame5 = cv2.applyColorMap(heat_map.heat_map, cv2.COLORMAP_JET)
-	#print(heat_map.heat_map)
+	print(heat_map.heat_map)
 
 	#Update previous frame
 	prev_gray = frame2
