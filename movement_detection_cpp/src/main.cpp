@@ -1,5 +1,6 @@
 #include <iostream>
 #include "opencv2/opencv.hpp"
+#include <heat_map.h>
 
 int main(int argc, const char* argv[]) {
 
