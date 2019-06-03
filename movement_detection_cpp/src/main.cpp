@@ -35,6 +35,8 @@ int main(int argc, const char* argv[]) {
 	cv::Mat prev_frame;
 	cv::Mat frame0, frame1, frame2, frame3, frame4, frame5;
 
+	HeatMap heat_map(1280, 720);
+
 	while(true) {
 
 		//Get raw image
@@ -57,15 +59,20 @@ int main(int argc, const char* argv[]) {
 
 		//Threshold frame
 		cv::threshold(frame3, frame4, 15, 255, cv::THRESH_BINARY);	
-	
+
+		//Update heat map
+		heat_map.increment_heat_map(frame4);
+		cv::applyColorMap(heat_map.get_heat_map(), frame5, cv::COLORMAP_JET);	
+
 		//Update previous frame
 		frame2.copyTo(prev_frame);
 		
 		cv::imshow("Raw", frame0);
-		cv::imshow("Gray", frame1);
-		cv::imshow("Gauss", frame2);
-		cv::imshow("Delta", frame3);
+		//cv::imshow("Gray", frame1);
+		//cv::imshow("Gauss", frame2);
+		//cv::imshow("Delta", frame3);
 		cv::imshow("Threshold", frame4);
+		cv::imshow("Heat Map", frame5);
 
 		if(cv::waitKey(30) >= 0) break;
 	

@@ -13,13 +13,16 @@ public:
 	//Take a binary image and increment the map with the image
 	void increment_heat_map(const cv::Mat& img);
 
+	const cv::Mat& get_heat_map() { return _heat_map; };
+
 private:
 
 	const unsigned _WIDTH;
 	const unsigned _HEIGHT;
 
 	//Using 1D vector for speed
-	std::vector<int> _heat_map;
+	//std::vector<int> _heat_map;
+	cv::Mat _heat_map;
 
 };
 
