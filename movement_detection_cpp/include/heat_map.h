@@ -7,22 +7,28 @@
 class HeatMap {
 
 public:
-	
-	HeatMap(const unsigned WIDTH, const unsigned HEIGHT);
 
-	//Take a binary image and increment the map with the image
-	void increment_heat_map(const cv::Mat& img);
+    HeatMap(const unsigned WIDTH, const unsigned HEIGHT,
+            const int GROWTH_RATE, const int DECAY_RATE);
 
-	const cv::Mat& get_heat_map() { return _heat_map; };
+    //Take a binary image and increment the map with the image
+    void increment_heat_map(const cv::Mat& img);
+
+    const cv::Mat& get_heat_map() { return _heat_map_img; };
 
 private:
 
-	const unsigned _WIDTH;
-	const unsigned _HEIGHT;
+    const unsigned _WIDTH;
+    const unsigned _HEIGHT;
 
-	//Using 1D vector for speed
-	//std::vector<int> _heat_map;
-	cv::Mat _heat_map;
+    const int _GROWTH_RATE;
+    const int _DECAY_RATE;
+
+    //Use 1D vector for speed
+    std::vector<short> _heat_map;
+
+    //Heat map image
+    cv::Mat _heat_map_img;
 
 };
 
