@@ -35,7 +35,18 @@ int main(int argc, const char* argv[]) {
     cv::Mat prev_frame;
     cv::Mat frame0, frame1, frame2, frame3, frame4, frame5;
 
-    HeatMap heat_map(1280, 720, 5, 1);
+    int growth_rate = 16;
+    int decay_rate = 4;
+
+    //Can take in growth rate and decay rate from command line
+    if(argc == 3) {
+        std::cout << "Growth rate: " << argv[1] << std::endl;
+        std::cout << "Decay rate: " << argv[2] << std::endl;
+        growth_rate = std::stoi(argv[1]);
+        decay_rate = std::stoi(argv[2]);
+    }
+
+    HeatMap heat_map(1280, 720, growth_rate, decay_rate);
 
     while(true) {
 
