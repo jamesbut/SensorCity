@@ -5,6 +5,7 @@ import io
 import numpy as np
 import cv2
 import subprocess
+from movement_detection import MovementDetection
 
 def bind_socket(port):
 
@@ -19,36 +20,34 @@ def bind_socket(port):
 
     return server_socket, connection
 
-def read_images(connection):
+def read_image(connection):
 
-    while True:
+    # Read the length of the image as a 32-bit unsigned int. If the
+    # length is zero, quit the loop
+    image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+    if not image_len:
+        return None
 
-        # Read the length of the image as a 32-bit unsigned int. If the
-        # length is zero, quit the loop
-        image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
-        if not image_len:
-            break
+    # Construct a stream to hold the image data and read the image
+    # data from the connection
+    image_stream = io.BytesIO()
+    image_stream.write(connection.read(image_len))
 
-        # Construct a stream to hold the image data and read the image
-        # data from the connection
-        image_stream = io.BytesIO()
-        image_stream.write(connection.read(image_len))
+    # Rewind the stream
+    image_stream.seek(0)
 
-        # Rewind the stream
-        image_stream.seek(0)
+    # Open image with PIL and do some processing on it
+    #image = Image.open(image_stream)
+    #image.show()
+    #print('Image is %dx%d' % image.size)
+    #image.verify()
+    #print('Image is verified')
 
-        # Open image with PIL and do some processing on it
-        #image = Image.open(image_stream)
-        #image.show()
-        #print('Image is %dx%d' % image.size)
-        #image.verify()
-        #print('Image is verified')
+    # Open image with OpenCV
+    file_bytes = np.asarray(bytearray(image_stream.read()), dtype=np.uint8)
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-        # Open image with OpenCV
-        file_bytes = np.asarray(bytearray(image_stream.read()), dtype=np.uint8)
-        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-        cv2.imshow('Image', img)
-        cv2.waitKey(1)
+    return img
 
 def read_video(connection):
 
@@ -73,10 +72,23 @@ def read_video(connection):
 
         player.terminate()
 
+def read_video_test(connection):
+
+    cv2.namedWindow("test-h264", cv2.WINDOW_NORMAL)
+    video = cv2.VideoCapture('tcp://192.168.1.80:8000')
+
+    while True:
+
+        ret,frame = video.read()
+        cv2.imshow("test-h264", frame )
+        cv2.waitKey(1)
+
+
+
 if __name__ == "__main__":
 
     # Either receive as images or video
-    receive_as_video = True
+    receive_as_video = False
 
     port = 8000
 
@@ -86,8 +98,21 @@ if __name__ == "__main__":
 
         if receive_as_video:
             read_video(connection)
+            #read_video_test(connection)
         else:
-            read_images(connection)
+
+            movement_detection = MovementDetection()
+
+            while True:
+
+                img = read_image(connection)
+                if img is None:
+                    break;
+
+                movement_detection.process(img)
+
+                #cv2.imshow('Image', img)
+                #cv2.waitKey(1)
 
     finally:
 

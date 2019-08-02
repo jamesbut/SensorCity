@@ -43,7 +43,7 @@ while(True):
 	frame1 = cv2.cvtColor(frame0, cv2.COLOR_BGR2GRAY)
 
 	#Apply gaussian blur
-	frame2 = cv2.GaussianBlur(frame1, (21, 21), 0)	
+	frame2 = cv2.GaussianBlur(frame1, (21, 21), 0)
 
 	#Initialise prev_gray
 	if prev_gray is None:
@@ -71,7 +71,7 @@ while(True):
 	cv2.imshow('Delta', frame3)
 	cv2.imshow('Threshold', frame4)
 	cv2.imshow('Heat Map', frame5)
-	
+
 	if cv2.waitKey(1) & 0xFF == ord('q'):
 		break
 

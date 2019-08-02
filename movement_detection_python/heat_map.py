@@ -14,5 +14,5 @@ class HeatMap:
 		for i in range(len(binary_array)):
 			for j in range(len(binary_array[i])):
 				if binary_array[i, j] == 255:
-					if self.heat_map[i, j] + self.colour_increment < 255: 
+					if self.heat_map[i, j] + self.colour_increment < 255:
 						self.heat_map[i, j] += 10
