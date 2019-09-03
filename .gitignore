@@ -1,2 +1,3 @@
 movement_detection_cpp/build/
 movement_detection_python/__pycache__/
+sensor_server/__pycache__/

@@ -6,12 +6,16 @@ import struct
 
 def establish_connection(host, port):
 
+    print("Establishing connection...")
+
     # Create client socket to the server
     client_socket = socket.socket()
     client_socket.connect((host, port))
 
     # Create file-like object out of the connection
     connection = client_socket.makefile('wb')
+
+    print("...connection established")
 
     return client_socket, connection
 
@@ -65,8 +69,10 @@ def send_video(connection):
 
 if __name__ == "__main__":
 
+    print("Starting...")
+
     # Either send as video or images
-    send_as_video = True
+    send_as_video = False
 
     # Connect client socket to server
     host = '192.168.1.69'

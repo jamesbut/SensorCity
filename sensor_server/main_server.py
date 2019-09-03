@@ -14,6 +14,8 @@ def bind_socket(port):
     server_socket.bind(('0.0.0.0', port))
     server_socket.listen(0)
 
+    print("Listening for communication...")
+
     # Accept a single connection and make a file-like object out of it
     # This waits for data being sent to the socket before executing
     connection = server_socket.accept()[0].makefile('rb')
