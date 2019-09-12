@@ -6,7 +6,9 @@ import time
 if __name__ == "__main__":
 
     james_mac_addr = '192.168.1.69'
-    mqtt_broker_addr = james_mac_addr
+    james_linux_home_addr = '192.168.1.66'
+    sensor_city_addr = 'sensorcity.io'
+    mqtt_broker_addr = sensor_city_addr
     mqtt_port = 1883
 
     # Connect to MQTT broker
@@ -33,7 +35,4 @@ if __name__ == "__main__":
 
             # Quit if we have been capturing for more than 30s
             if time.time() - start > 30:
-                break;
-
-
-
+                break

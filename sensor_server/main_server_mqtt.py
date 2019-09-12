@@ -1,4 +1,5 @@
 import io
+import paho.mqtt.client as mqtt
 import numpy as np
 import cv2
 from movement_detection import MovementDetection
@@ -33,8 +34,9 @@ def on_message(client, userdata, msg):
 
 if __name__ == "__main__":
 
-    james_mac_addr = '192.1681.69'
-    mqtt_broker_addr = james_mac_addr
+    james_mac_addr = '192.168.1.69'
+    sensor_city_addr = 'sensorcity.io'
+    mqtt_broker_addr = sensor_city_addr
     mqtt_port = 1883
 
     client = mqtt.Client()
@@ -45,6 +47,8 @@ if __name__ == "__main__":
 
     client.on_connect = on_connect
     client.on_message = on_message
+
+    print("Looping..")
 
     client.loop_forever()
 
