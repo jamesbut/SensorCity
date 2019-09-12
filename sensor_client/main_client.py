@@ -40,7 +40,7 @@ def send_images(connection):
             stream.seek(0)
             connection.write(stream.read())
 
-            # Quit if we have beebn capturing for more than 30s
+            # Quit if we have been capturing for more than 30s
             if time.time() - start > 30:
                 break;
 
