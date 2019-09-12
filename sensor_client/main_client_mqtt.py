@@ -31,8 +31,13 @@ if __name__ == "__main__":
 
         for _ in camera.capture_continuous(stream, 'jpeg'):
 
-            client.publish("heat-map/rgb-stream", stream)
+            stream.seek(0)
+
+            client.publish("heat-map/rgb-stream", stream.read())
 
             # Quit if we have been capturing for more than 30s
             if time.time() - start > 30:
                 break
+
+            stream.seek(0)
+            stream.truncate()

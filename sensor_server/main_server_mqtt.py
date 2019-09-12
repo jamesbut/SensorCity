@@ -27,9 +27,10 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    rgb_img = read_image(msg)
+    print("DETECTING IMAGE!")
 
-    movement_detection.process_image(rgb_img)
+    rgb_img = read_image(msg)
+    movement_detection.process(rgb_img)
 
 
 if __name__ == "__main__":
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     client.on_connect = on_connect
     client.on_message = on_message
 
-    print("Looping..")
+    print("Listening..")
 
     client.loop_forever()
 

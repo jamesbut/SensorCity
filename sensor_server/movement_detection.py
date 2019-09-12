@@ -10,7 +10,6 @@ class MovementDetection:
         #Move windows to better place
         cv2.namedWindow('Raw')
         cv2.moveWindow('Raw', 0, 0)
-        '''
         cv2.namedWindow('Gray')
         cv2.moveWindow('Gray', 400, 0)
         cv2.namedWindow('Gauss')
@@ -27,12 +26,11 @@ class MovementDetection:
 
         #Create Heat Map
         self.heat_map = HeatMap(480, 640, 16, 4)
-        '''
 
     def process(self, img):
 
         frame0 = img
-        '''
+
         #Grey image
         frame1 = cv2.cvtColor(frame0, cv2.COLOR_BGR2GRAY)
 
@@ -53,19 +51,17 @@ class MovementDetection:
         #Increment tiles in heat map
         self.heat_map.increment_tiles(frame4)
         frame5 = cv2.applyColorMap(self.heat_map.heat_map, cv2.COLORMAP_JET)
-        print(self.heat_map.heat_map)
 
         #Update previous frame
         self.prev_gray = frame2
-        '''
+
         #Display the images
         cv2.imshow('Raw', frame0)
-        '''
         cv2.imshow('Gray', frame1)
         cv2.imshow('Gauss', frame2)
         cv2.imshow('Delta', frame3)
         cv2.imshow('Threshold', frame4)
         cv2.imshow('Heat Map', frame5)
-        '''
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
