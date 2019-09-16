@@ -4,8 +4,11 @@ import numpy as np
 import cv2
 from movement_detection import MovementDetection
 
+res_width = 160
+res_height = 120
+
 # TODO: this shouldn't be a global variable
-movement_detection = MovementDetection()
+movement_detection = MovementDetection(res_height, res_width)
 
 def read_image(msg):
 

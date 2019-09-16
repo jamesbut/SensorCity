@@ -11,6 +11,9 @@ if __name__ == "__main__":
     mqtt_broker_addr = sensor_city_addr
     mqtt_port = 1883
 
+    res_height = 120
+    res_width = 160
+
     # Connect to MQTT broker
     client = mqtt.Client()
 
@@ -21,8 +24,7 @@ if __name__ == "__main__":
     # Set up pi camera
     with picamera.PiCamera() as camera:
 
-        camera.resolution = (640, 480)
-        # TODO: Do I need to start preview?
+        camera.resolution = (res_width, res_height)
         camera.start_preview()
         time.sleep(2)
 

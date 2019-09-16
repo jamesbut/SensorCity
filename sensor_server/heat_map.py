@@ -3,6 +3,7 @@ import numpy as np
 class HeatMap:
 
     def __init__(self, height, width, growth_rate, decay_rate):
+
         self.height = height
         self.width = width
 
