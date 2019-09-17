@@ -29,8 +29,6 @@ if __name__ == "__main__":
     rotary_listener = Process(target=rotary_encoder.listen)
     rotary_listener.start()
 
-
-
     # Set up pi camera
     with picamera.PiCamera() as camera:
 
