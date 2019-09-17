@@ -14,6 +14,9 @@ if __name__ == "__main__":
     res_height = 120
     res_width = 160
 
+    # Start listening to Rotary Encoder
+    rotary_encoder = RotaryEncoder()
+
     # Connect to MQTT broker
     client = mqtt.Client()
 
