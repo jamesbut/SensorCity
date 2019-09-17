@@ -69,3 +69,7 @@ class MovementDetection:
     def increment_heat_map_growth_rate(self, amount):
 
         self.heat_map.increment_growth_rate(amount)
+
+    def increment_heat_map_decay_rate(self, amount):
+
+        self.heat_map.increment_decay_rate(amount)

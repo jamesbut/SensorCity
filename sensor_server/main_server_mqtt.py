@@ -27,20 +27,26 @@ def on_connect(client, userdata, flags, rc):
 
     print("Connected with result code " + str(rc))
     client.subscribe("heat-map/rgb-stream")
-    client.subscribe("heat-map/rotary-encoder")
+    client.subscribe("heat-map/rotary-encoder/growth_rate")
+    client.subscribe("heat-map/rotary-encoder/decay_rate")
 
 def on_message(client, userdata, msg):
 
     print("Message received")
 
-    if msg.topic == "heat-map/rotary-encoder":
+    if msg.topic == "heat-map/rotary-encoder/growth_rate":
         if msg.payload == b'0':
             movement_detection.increment_heat_map_growth_rate(3)
         if msg.payload == b'1':
             movement_detection.increment_heat_map_growth_rate(-3)
 
+    if msg.topic == "heat-map/rotary-encoder/decay_rate":
+        if msg.payload == b'0':
+            movement_detection.increment_heat_map_decay_rate(3)
+        if msg.payload == b'1':
+            movement_detection.increment_heat_map_decay_rate(-3)
+
     if msg.topic == "heat-map/rgb-stream":
-        print("RGB image received")
         rgb_img = read_image(msg)
         movement_detection.process(rgb_img)
 

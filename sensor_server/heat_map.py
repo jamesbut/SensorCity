@@ -11,6 +11,7 @@ class HeatMap:
         self.decay_rate = decay_rate
 
         self.MAX_GROWTH_RATE = 30
+        self.MAX_DECAY_RATE = 30
 
         self.heat_map = np.zeros((height, width), dtype=np.uint8)
 
@@ -50,3 +51,23 @@ class HeatMap:
                 self.growth_rate += amount
 
         print("Growth rate:", self.growth_rate)
+
+    def increment_decay_rate(self, amount):
+
+        print("HELLO")
+
+        if amount < 0:
+
+            if self.decay_rate + amount <= 0:
+                self.decay_rate = 0
+            else:
+                self.decay_rate += amount
+
+        else:
+
+            if self.decay_rate + amount > self.MAX_DECAY_RATE:
+                self.decay_rate = self.MAX_DECAY_RATE
+            else:
+                self.decay_rate += amount
+
+        print("Decay rate:", self.decay_rate)
