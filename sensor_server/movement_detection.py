@@ -65,3 +65,7 @@ class MovementDetection:
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
+
+    def increment_heat_map_growth_rate(self, amount):
+
+        self.heat_map.increment_growth_rate(amount)
