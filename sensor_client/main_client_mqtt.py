@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 import picamera
 import io
 import time
+from rotary_encoder import RotaryEncoder
+from multiprocessing import Process
+from time import sleep
 
 if __name__ == "__main__":
 
@@ -14,15 +17,19 @@ if __name__ == "__main__":
     res_height = 120
     res_width = 160
 
-    # Start listening to Rotary Encoder
-    rotary_encoder = RotaryEncoder()
-
     # Connect to MQTT broker
     client = mqtt.Client()
 
-    print("Connecting..")
+    print("Connecting to MQTT broker..")
     client.connect(mqtt_broker_addr, mqtt_port, 60)
     print("..connected")
+
+    # Start listening to Rotary Encoder
+    rotary_encoder = RotaryEncoder(client)
+    rotary_listener = Process(target=rotary_encoder.listen)
+    rotary_listener.start()
+
+
 
     # Set up pi camera
     with picamera.PiCamera() as camera:
@@ -46,3 +53,5 @@ if __name__ == "__main__":
 
             stream.seek(0)
             stream.truncate()
+
+    rotary_listener.join()
