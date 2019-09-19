@@ -25,7 +25,7 @@ class MovementDetection:
         self.prev_gray = None
 
         #Create Heat Map
-        self.heat_map = HeatMap(res_height, res_width, 16, 4)
+        self.heat_map = HeatMap(res_height, res_width, 16*255, 4)
 
     def process(self, img):
 
@@ -50,7 +50,10 @@ class MovementDetection:
 
         #Increment tiles in heat map
         self.heat_map.increment_tiles(frame4)
-        frame5 = cv2.applyColorMap(self.heat_map.heat_map, cv2.COLORMAP_JET)
+
+        sixteen_bit_hm = self.heat_map.heat_map
+        eight_bit_hm = cv2.convertScaleAbs(self.heat_map.heat_map, alpha=(255.0/65535.0))
+        frame5 = cv2.applyColorMap(eight_bit_hm, cv2.COLORMAP_JET)
 
         #Update previous frame
         self.prev_gray = frame2
@@ -76,3 +79,7 @@ class MovementDetection:
     def increment_heat_map_decay_rate(self, amount):
 
         self.heat_map.increment_decay_rate(amount)
+
+    def reset_heat_map_rates(self):
+
+        self.heat_map.reset_rates()

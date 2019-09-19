@@ -7,13 +7,17 @@ class HeatMap:
         self.height = height
         self.width = width
 
+        self.init_growth_rate = growth_rate
+        self.init_decay_rate = decay_rate
+
         self.growth_rate = growth_rate
         self.decay_rate = decay_rate
 
         self.MAX_GROWTH_RATE = 30
         self.MAX_DECAY_RATE = 30
 
-        self.heat_map = np.zeros((height, width), dtype=np.uint8)
+        #self.heat_map = np.zeros((height, width), dtype=np.uint8)
+        self.heat_map = np.zeros((height, width), dtype=np.uint16)
 
     def increment_tiles(self, binary_array):
 
@@ -23,8 +27,10 @@ class HeatMap:
                 #Grow heat map
                 if binary_array[i, j] == 255:
 
-                    if self.heat_map[i, j] + self.growth_rate > 255:
-                        self.heat_map[i, j] = 255
+                    #if self.heat_map[i, j] + self.growth_rate > 255:
+                    #    self.heat_map[i, j] = 255
+                    if self.heat_map[i, j] + self.growth_rate > 65535:
+                        self.heat_map[i, j] = 65535
                     else:
                         self.heat_map[i, j] += self.growth_rate
 
@@ -33,6 +39,7 @@ class HeatMap:
                     self.heat_map[i, j] = 0
                 else:
                     self.heat_map[i, j] -= self.decay_rate
+
 
     def increment_growth_rate(self, amount):
 
@@ -54,8 +61,6 @@ class HeatMap:
 
     def increment_decay_rate(self, amount):
 
-        print("HELLO")
-
         if amount < 0:
 
             if self.decay_rate + amount <= 0:
@@ -70,4 +75,13 @@ class HeatMap:
             else:
                 self.decay_rate += amount
 
+        print("Decay rate:", self.decay_rate)
+
+    def reset_rates(self):
+
+        self.growth_rate = self.init_growth_rate
+        self.decay_rate = self.init_decay_rate
+
+        print("Reseting growth and decay rates!")
+        print("Growth rate:", self.growth_rate)
         print("Decay rate:", self.decay_rate)

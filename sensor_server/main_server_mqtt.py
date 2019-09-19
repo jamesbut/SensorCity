@@ -29,10 +29,9 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("heat-map/rgb-stream")
     client.subscribe("heat-map/rotary-encoder/growth_rate")
     client.subscribe("heat-map/rotary-encoder/decay_rate")
+    client.subscribe("heat-map/rotary-encoder/switch")
 
 def on_message(client, userdata, msg):
-
-    print("Message received")
 
     if msg.topic == "heat-map/rotary-encoder/growth_rate":
         if msg.payload == b'0':
@@ -45,6 +44,9 @@ def on_message(client, userdata, msg):
             movement_detection.increment_heat_map_decay_rate(3)
         if msg.payload == b'1':
             movement_detection.increment_heat_map_decay_rate(-3)
+
+    if msg.topic == "heat-map/rotary-encoder/switch":
+        movement_detection.reset_heat_map_rates()
 
     if msg.topic == "heat-map/rgb-stream":
         rgb_img = read_image(msg)
