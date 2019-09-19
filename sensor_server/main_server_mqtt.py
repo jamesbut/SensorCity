@@ -35,15 +35,15 @@ def on_message(client, userdata, msg):
 
     if msg.topic == "heat-map/rotary-encoder/growth_rate":
         if msg.payload == b'0':
-            movement_detection.increment_heat_map_growth_rate(3)
+            movement_detection.increment_heat_map_growth_rate(100)
         if msg.payload == b'1':
-            movement_detection.increment_heat_map_growth_rate(-3)
+            movement_detection.increment_heat_map_growth_rate(-100)
 
     if msg.topic == "heat-map/rotary-encoder/decay_rate":
         if msg.payload == b'0':
-            movement_detection.increment_heat_map_decay_rate(3)
+            movement_detection.increment_heat_map_decay_rate(100)
         if msg.payload == b'1':
-            movement_detection.increment_heat_map_decay_rate(-3)
+            movement_detection.increment_heat_map_decay_rate(-100)
 
     if msg.topic == "heat-map/rotary-encoder/switch":
         movement_detection.reset_heat_map_rates()

@@ -7,14 +7,14 @@ class HeatMap:
         self.height = height
         self.width = width
 
-        self.init_growth_rate = growth_rate
-        self.init_decay_rate = decay_rate
+        self.init_growth_rate = growth_rate * 255
+        self.init_decay_rate = decay_rate * 255
 
-        self.growth_rate = growth_rate
-        self.decay_rate = decay_rate
+        self.growth_rate = growth_rate * 255
+        self.decay_rate = decay_rate * 255
 
-        self.MAX_GROWTH_RATE = 30
-        self.MAX_DECAY_RATE = 30
+        self.MAX_GROWTH_RATE = 30 * 255
+        self.MAX_DECAY_RATE = 30 * 255
 
         #self.heat_map = np.zeros((height, width), dtype=np.uint8)
         self.heat_map = np.zeros((height, width), dtype=np.uint16)

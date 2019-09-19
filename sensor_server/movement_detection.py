@@ -25,7 +25,7 @@ class MovementDetection:
         self.prev_gray = None
 
         #Create Heat Map
-        self.heat_map = HeatMap(res_height, res_width, 16*255, 4)
+        self.heat_map = HeatMap(res_height, res_width, 16, 4)
 
     def process(self, img):
 
