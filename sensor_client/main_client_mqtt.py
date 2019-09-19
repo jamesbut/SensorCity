@@ -31,18 +31,14 @@ if __name__ == "__main__":
     print("..connected")
 
     # Start listening to both Rotary Encoders
-    growth_rotary_encoder = RotaryEncoder(client, "growth-rate", growth_clk_pin, growth_dt_pin, growth_sw_pin)
+    growth_rotary_encoder = RotaryEncoder(client, "growth_rate", growth_clk_pin, growth_dt_pin, growth_sw_pin)
     growth_rotary_listener = Process(target=growth_rotary_encoder.listen)
     growth_rotary_listener.start()
 
-    decay_rotary_encoder = RotaryEncoder(client, "decay-rate", decay_clk_pin, decay_dt_pin, decay_sw_pin)
+    decay_rotary_encoder = RotaryEncoder(client, "decay_rate", decay_clk_pin, decay_dt_pin, decay_sw_pin)
     decay_rotary_listener = Process(target=decay_rotary_encoder.listen)
     decay_rotary_listener.start()
 
-    while True:
-        continue
-
-    '''
     # Set up pi camera
     with picamera.PiCamera() as camera:
 
@@ -60,12 +56,11 @@ if __name__ == "__main__":
             client.publish("heat-map/rgb-stream", stream.read())
 
             # Quit if we have been capturing for more than 30s
-            if time.time() - start > 120:
-                break
+            #if time.time() - start > 120:
+            #    break
 
             stream.seek(0)
             stream.truncate()
-    '''
 
     growth_rotary_listener.join()
     decay_rotary_listener.join()
