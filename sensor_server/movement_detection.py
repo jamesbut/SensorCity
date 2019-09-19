@@ -61,7 +61,10 @@ class MovementDetection:
         #cv2.imshow('Gauss', frame2)
         #cv2.imshow('Delta', frame3)
         #cv2.imshow('Threshold', frame4)
-        cv2.imshow('Heat Map', frame5)
+
+        frame5_resized = cv2.resize(frame5, (640, 480))
+
+        cv2.imshow('Heat Map', frame5_resized)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()

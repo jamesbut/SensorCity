@@ -1,2 +1,3 @@
 picamera
 paho-mqtt
+rpi.gpio
