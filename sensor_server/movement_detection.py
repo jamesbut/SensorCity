@@ -1,3 +1,8 @@
+'''
+    This class is resonsible for determining movement
+    in the image using openCV functions.
+'''
+
 import cv2
 import numpy as np
 import time
@@ -5,7 +10,7 @@ from heat_map import HeatMap
 
 class MovementDetection:
 
-    def __init__(self, res_height, res_width):
+    def __init__(self, res_height, res_width, disp_height, disp_width):
 
         #Move windows to better place
         cv2.namedWindow('Raw')
@@ -24,8 +29,12 @@ class MovementDetection:
         #Prev grey frame for frame differences
         self.prev_gray = None
 
+        #Set display size of heat map
+        self.disp_height = disp_height
+        self.dist_width = disp_width
+
         #Create Heat Map
-        self.heat_map = HeatMap(res_height, res_width, 16, 4)
+        self.heat_map = HeatMap(res_height, res_width)
 
     def process(self, img):
 
@@ -51,8 +60,11 @@ class MovementDetection:
         #Increment tiles in heat map
         self.heat_map.increment_tiles(frame4)
 
+        #Convert 16 bit int heat map to 8 bit int openCV image
         sixteen_bit_hm = self.heat_map.heat_map
         eight_bit_hm = cv2.convertScaleAbs(self.heat_map.heat_map, alpha=(255.0/65535.0))
+
+        #Apply colour map to 8 bit int image
         frame5 = cv2.applyColorMap(eight_bit_hm, cv2.COLORMAP_JET)
 
         #Update previous frame
@@ -65,21 +77,24 @@ class MovementDetection:
         #cv2.imshow('Delta', frame3)
         #cv2.imshow('Threshold', frame4)
 
-        frame5_resized = cv2.resize(frame5, (640, 480))
+        frame5_resized = cv2.resize(frame5, (self.disp_width, self.disp_height))
 
         cv2.imshow('Heat Map', frame5_resized)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
 
+    #Changes heat map growth rate
     def increment_heat_map_growth_rate(self, amount):
 
         self.heat_map.increment_growth_rate(amount)
 
+    #Changes heat map decay rate
     def increment_heat_map_decay_rate(self, amount):
 
         self.heat_map.increment_decay_rate(amount)
 
+    #Resets growth and decay rates to default values
     def reset_heat_map_rates(self):
 
         self.heat_map.reset_rates()

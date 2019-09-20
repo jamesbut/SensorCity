@@ -1,20 +1,33 @@
+'''
+    This piece of code is meant to be run on a Raspberry Pi.
+
+    It starts publishing images from the Pi Camera to an
+    MQTT broker.
+
+    It also listens to 2 rotary encoders which
+    can be used to send a message to the broker instructing
+    growth and decay rates of a heat map to change.
+'''
+
 import paho.mqtt.client as mqtt
 import picamera
 import io
 import time
 from rotary_encoder import RotaryEncoder
 from multiprocessing import Process
-from time import sleep
 
 if __name__ == "__main__":
 
+    #MQTT broker address and port
     sensor_city_addr = 'sensorcity.io'
     mqtt_broker_addr = sensor_city_addr
     mqtt_port = 1883
 
+    #Resolution of the captured images
     res_height = 120
     res_width = 160
 
+    #GPIO pin numbers of the 2 rotary encoders
     growth_clk_pin = 17
     growth_dt_pin = 18
     growth_sw_pin = 27
@@ -30,7 +43,7 @@ if __name__ == "__main__":
     client.connect(mqtt_broker_addr, mqtt_port, 60)
     print("..connected")
 
-    # Start listening to both Rotary Encoders
+    # Start listening to both Rotary Encoders in parallel
     growth_rotary_encoder = RotaryEncoder(client, "growth_rate", growth_clk_pin, growth_dt_pin, growth_sw_pin)
     growth_rotary_listener = Process(target=growth_rotary_encoder.listen)
     growth_rotary_listener.start()

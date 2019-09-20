@@ -1,19 +1,27 @@
+'''
+    This piece of code establishes a connection
+    with an MQTT broker and subsrcibes to a number
+    of topics.
+    It listens to these topics and then acts according
+    to the name and type of message.
+'''
+
 import io
 import paho.mqtt.client as mqtt
 import numpy as np
 import cv2
 from movement_detection import MovementDetection
 
+# The resolution of the recorded images - this should
+# match the resolution in the client code
 res_width = 160
 res_height = 120
 
-# TODO: this shouldn't be a global variable
 movement_detection = MovementDetection(res_height, res_width)
 
+# Reads image and converts it to an openCV image
 def read_image(msg):
 
-    # TODO: This might be overkill, I might be able
-    # to use the msg byte stream directly
     img_stream = io.BytesIO()
     img_stream.write(msg.payload)
     img_stream.seek(0)
@@ -23,6 +31,7 @@ def read_image(msg):
 
     return img
 
+# Listens to topics
 def on_connect(client, userdata, flags, rc):
 
     print("Connected with result code " + str(rc))
@@ -31,30 +40,35 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("heat-map/rotary-encoder/decay_rate")
     client.subscribe("heat-map/rotary-encoder/switch")
 
+# Called when a message is received at any of the subscribed topics
 def on_message(client, userdata, msg):
 
+    # Change growth rate
     if msg.topic == "heat-map/rotary-encoder/growth_rate":
         if msg.payload == b'0':
             movement_detection.increment_heat_map_growth_rate(100)
         if msg.payload == b'1':
             movement_detection.increment_heat_map_growth_rate(-100)
 
+    # Change decay rate
     if msg.topic == "heat-map/rotary-encoder/decay_rate":
         if msg.payload == b'0':
             movement_detection.increment_heat_map_decay_rate(100)
         if msg.payload == b'1':
             movement_detection.increment_heat_map_decay_rate(-100)
 
+    # Reset heat map rates because switch was pressed
     if msg.topic == "heat-map/rotary-encoder/switch":
         movement_detection.reset_heat_map_rates()
 
+    # Process image and detect movement
     if msg.topic == "heat-map/rgb-stream":
         rgb_img = read_image(msg)
         movement_detection.process(rgb_img)
 
 if __name__ == "__main__":
 
-    james_mac_addr = '192.168.1.69'
+    # MQTT broker address and port
     sensor_city_addr = 'sensorcity.io'
     mqtt_broker_addr = sensor_city_addr
     mqtt_port = 1883
