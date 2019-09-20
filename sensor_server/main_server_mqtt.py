@@ -17,7 +17,7 @@ from movement_detection import MovementDetection
 res_width = 160
 res_height = 120
 
-movement_detection = MovementDetection(res_height, res_width)
+movement_detection = MovementDetection(res_height, res_width, 4*res_height, 4*res_width)
 
 # Reads image and converts it to an openCV image
 def read_image(msg):

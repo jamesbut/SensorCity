@@ -31,7 +31,7 @@ class MovementDetection:
 
         #Set display size of heat map
         self.disp_height = disp_height
-        self.dist_width = disp_width
+        self.disp_width = disp_width
 
         #Create Heat Map
         self.heat_map = HeatMap(res_height, res_width)
