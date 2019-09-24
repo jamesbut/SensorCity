@@ -10,7 +10,7 @@ from heat_map import HeatMap
 
 class MovementDetection:
 
-    def __init__(self, res_height, res_width, disp_height, disp_width):
+    def __init__(self, res_height, res_width, disp_height, disp_width, overlay_alpha = 0.35):
 
         #Move windows to better place
         cv2.namedWindow('Raw')
@@ -24,7 +24,9 @@ class MovementDetection:
         #cv2.namedWindow('Threshold')
         #cv2.moveWindow('Threshold', 400, 350)
         cv2.namedWindow('Heat Map')
-        cv2.moveWindow('Heat Map', 800, 350)
+        cv2.moveWindow('Heat Map', 450, 300)
+        cv2.namedWindow('Overlay')
+        cv2.moveWindow('Overlay', 900, 0)
 
         #Prev grey frame for frame differences
         self.prev_gray = None
@@ -32,6 +34,8 @@ class MovementDetection:
         #Set display size of heat map
         self.disp_height = disp_height
         self.disp_width = disp_width
+
+        self.alpha = overlay_alpha
 
         #Create Heat Map
         self.heat_map = HeatMap(res_height, res_width)
@@ -49,7 +53,6 @@ class MovementDetection:
         #Initialise prev_gray
         if self.prev_gray is None:
             self.prev_gray = frame2
-            #continue
 
         #Delta frame
         frame3 = cv2.absdiff(self.prev_gray, frame2)
@@ -67,6 +70,15 @@ class MovementDetection:
         #Apply colour map to 8 bit int image
         frame5 = cv2.applyColorMap(eight_bit_hm, cv2.COLORMAP_JET)
 
+        #Remove blue for overlay
+        blue_mask= cv2.inRange(frame5, np.array([128,0,0]), np.array([128,0,0]))
+        frame6 = frame5.copy()
+        frame6[blue_mask>0] = frame0[blue_mask>0]
+
+        #Apply overlay
+        frame7 = frame5.copy()
+        cv2.addWeighted(frame6, self.alpha, frame0 , 1-self.alpha, 0, frame7)
+
         #Update previous frame
         self.prev_gray = frame2
 
@@ -77,9 +89,12 @@ class MovementDetection:
         #cv2.imshow('Delta', frame3)
         #cv2.imshow('Threshold', frame4)
 
+        #Image can be resized beyond its actual resolution
         frame5_resized = cv2.resize(frame5, (self.disp_width, self.disp_height))
+        frame7_resized = cv2.resize(frame7, (self.disp_width, self.disp_height))
 
         cv2.imshow('Heat Map', frame5_resized)
+        cv2.imshow('Overlay', frame7_resized)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
